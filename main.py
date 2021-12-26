@@ -1,6 +1,6 @@
 import statsapi
 
-
+#NOTE TO SELF: Use MLB-Stats-API endpoints to find extra data --> like venue, umpire data, contextData, etc
 
 # Takes in a string abv or full form of a city name and returns the associated teamId
 def get_team_id(cityName): 
@@ -14,13 +14,22 @@ def get_player_id(playerLastName):
     playerId = player[0]['id']
     return playerId
 
+#how to get the best offensive teams
+#how to get the best defensive teams
 
-try:
-    print(statsapi.player_stat_data(get_player_id('austin nola'), group="[hitting,pitching,fielding]", type="season"))
-except:
-     print("Invalid Player Given")
+# def get_team_averages(cityName, groupType):
 
-print( statsapi.roster(get_team_id("seattle mariners")) )
+#     if (groupType == "hitting"): 
+
+# print(statsapi.player_stats(get_player_id("haniger"), group="[hitting,pitching,fielding]", type="season"))
+
+# try:
+#     print(statsapi.player_stat_data(get_player_id('austin nola'), group="[hitting,pitching,fielding]", type="season"))
+# except:
+#      print("Invalid Player Given")
+
+# print( statsapi.roster(get_team_id("seattle mariners")) )
+# print( statsapi.league_leaders('homeruns',statGroup='hitting',limit=10,season=2021) )
 # teamLeader = statsapi.team_leader_data(teamId, "homeruns")
 # print(teamLeader);
 
