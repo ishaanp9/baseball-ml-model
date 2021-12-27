@@ -1,9 +1,9 @@
 import statsapi
-
-
 from smallHelperFunctions import *
 
 #NOTE TO SELF: Use MLB-Stats-API endpoints to find extra data --> like venue, umpire data, contextData, etc
+
+#core functions
 
 # Takes in a string abv or full form of a city name and returns the associated teamId
 def get_team_id(cityName): 
@@ -14,11 +14,14 @@ def get_team_id(cityName):
 # Takes in string playerFirstName and playerLastName and returns the asscoiated playerId
 def get_player_id(playerFirstName, playerLastName): 
     player = statsapi.lookup_player(playerLastName + ',')
-    playerId = player[0]['id']
-    for count,  x in enumerate(player):
-        if (playerFirstName.lower() in x.get('firstName').lower()):
-            playerId = player[count]['id']
-    return playerId
+    try: 
+        playerId = player[0]['id']
+        for count,  x in enumerate(player):
+            if (playerFirstName.lower() in x.get('firstName').lower()):
+                playerId = player[count]['id']
+        return playerId
+    except:
+        return None
 
 #how to get the best offensive teams
 #how to get the best defensive teams
@@ -27,15 +30,7 @@ def get_player_id(playerFirstName, playerLastName):
 
 #     if (groupType == "hitting"): 
 
-# print(statsapi.player_stats(get_player_id("Ramirez"), group="[hitting,pitching,fielding]", type="season"))
 
-
-# try:
-#     print(statsapi.player_stat_data(get_player_id('austin nola'), group="[hitting,pitching,fielding]", type="season"))
-# except:
-#      print("Invalid Player Given")
-
-#retrieves team roster in a list item
 def getTeamRoster(teamName):
     rosterString = statsapi.roster(get_team_id(teamName)) 
     splitRoster = rosterString.split()
@@ -49,42 +44,37 @@ def getTeamRoster(teamName):
 
     return teamRosterList
 
-# print(getTeamRoster("mariners"))
-#get last item from year to year to compile team stats
 
 
-# print(statsapi.get('team_roster', {'teamId': get_team_id("mariners")}))
-# print( statsapi.league_leaders('homeruns',statGroup='hitting',limit=10,season=2021) )
-# teamLeader = statsapi.team_leader_data(teamId, "homeruns")
-# print(teamLeader);
+# compiles team data based on given teamName (ex.mariners, rangers, astros, etc)
+# organizes data in nested dictionaries 
+# categorizes data based on position --> pitcher or non-pitcher
+def compileTeamData(teamName):
+    playerStatistics = {}
+    teamRosterFetcher = getTeamRoster(teamName)
 
+    for x in range(len(teamRosterFetcher)):
+        splitPlayerString = teamRosterFetcher[x].split()
+        playerPosition = splitPlayerString[1] #player postion (ex -> P or 1B)
+        if (playerPosition == "P"):
+            playerPositionString = 'pitching'
+        else:
+            # Add fielding component later
+            playerPositionString = 'hitting'
+        playerFirstName = splitPlayerString[2] #player First Name
+        playerLastName = splitPlayerString[len(splitPlayerString) - 1] #player Last Name
+        playerStatistics[teamRosterFetcher[x]] = {} 
+        # if player doesn't exsist in database (ex. Andres Munoz)
+        if get_player_id(playerFirstName, playerLastName) != None:
+            careerStatHolder = statsapi.player_stats(get_player_id(playerFirstName, playerLastName), playerPositionString, 'yearByYear').split()
+            beginningPlayerStatIndex = rindex(careerStatHolder, "YearByYear") + 2
+        for count, stat in enumerate(careerStatHolder[beginningPlayerStatIndex:: 2]) :   
+            playerStatistics[teamRosterFetcher[x]][stat] = careerStatHolder[beginningPlayerStatIndex + (count * 2) + 1]
 
+    return playerStatistics
 
-# Iterate through each player, fetch their first and last name to get playerStats using Id.
-# Now we get index of most recent year
-# we now use the player name and the index to populate the nested dictionary
-# We convert the string integers into doubles
-# We iterate by every two
-
-playerStatistics = {}
-teamRosterFetcher = getTeamRoster("mariners")
-
-for x in range(len(teamRosterFetcher)):
-    splitPlayerString = teamRosterFetcher[x].split()
-    playerPosition = splitPlayerString[1] #player postion (ex -> P or 1B)
-    playerFirstName = splitPlayerString[2] #player First Name
-    playerLastName = splitPlayerString[len(splitPlayerString) - 1] #player Last Name
-    playerStatistics[teamRosterFetcher[x]] = {} 
-    print(playerPosition + " " + playerFirstName + " " + playerLastName)
-    careerStatHolder = statsapi.player_stats(get_player_id(playerFirstName, playerLastName), 'pitching', 'yearByYear').split()
-    beginningPlayerStatIndex = rindex(careerStatHolder, "gamesPlayed")
-    for stat in careerStatHolder[beginningPlayerStatIndex:: 2] :
-        poop = "pee"
-        # playerStatistics[teamRosterFetcher[x]][stat] = stat + 1
-
-
-
+print(compileTeamData("royals"))
 
     
 
-# print(getTeamRoster("mariners"))
+
