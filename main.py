@@ -17,7 +17,7 @@ def get_team_id(cityName):
 def get_player_id(playerFirstName, playerLastName): 
     player = statsapi.lookup_player(playerLastName + ',')
     try: 
-        playerId = player[0]['id']
+        playerId = None
         for count,  x in enumerate(player):
             if (playerFirstName.lower() in x.get('firstName').lower()):
                 playerId = player[count]['id']
@@ -60,14 +60,14 @@ def compile_Team_Data(teamName):
         if get_player_id(playerFirstName, playerLastName) != None:
             careerStatHolder = statsapi.player_stats(get_player_id(playerFirstName, playerLastName), playerPositionString, 'yearByYear').split()
             beginningPlayerStatIndex = rindex(careerStatHolder, "YearByYear") + 2
-        for count, stat in enumerate(careerStatHolder[beginningPlayerStatIndex:: 2]) :
-            statValue = (careerStatHolder[beginningPlayerStatIndex + (count * 2) + 1])
-            # checks if statValue is a valid string that can be turned into a number. 
-            # if not it will not do anything with it.
-            if '-' not in statValue:
-                playerStatistics[teamRosterFetcher[x]][stat] = float(statValue)
-            else: 
-                playerStatistics[teamRosterFetcher[x]][stat] = statValue
+            for count, stat in enumerate(careerStatHolder[beginningPlayerStatIndex:: 2]) :
+                statValue = (careerStatHolder[beginningPlayerStatIndex + (count * 2) + 1])
+                # checks if statValue is a valid string that can be turned into a number. 
+                # if not it will not do anything with it.
+                if '-' not in statValue:
+                    playerStatistics[teamRosterFetcher[x]][stat] = float(statValue)
+                else: 
+                    playerStatistics[teamRosterFetcher[x]][stat] = statValue
     return playerStatistics
 
 # stat - hitting, pitching, fielding or specific like homeRuns: or rbi:
@@ -88,8 +88,9 @@ def get_team_averages(teamName, statType):
     return round(statTotal / count, 2)
 
 
-
-print(get_team_averages("mariners", "homeRuns:"))
+# print(get_Team_Roster("astros"))
+print(get_team_averages("astros", "homeRuns:")) 
+print(get_team_averages("yankees", "homeRuns:"))
 print("My program took,", int(time.time() - start_time), "seconds to run")
     
 
