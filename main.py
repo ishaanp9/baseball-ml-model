@@ -1,4 +1,6 @@
 import statsapi
+import time
+start_time = time.time()
 from smallHelperFunctions import *
 
 #NOTE TO SELF: Use MLB-Stats-API endpoints to find extra data --> like venue, umpire data, contextData, etc
@@ -23,15 +25,7 @@ def get_player_id(playerFirstName, playerLastName):
     except:
         return None
 
-#how to get the best offensive teams
-#how to get the best defensive teams
-
-# def get_team_averages(cityName, groupType):
-
-#     if (groupType == "hitting"): 
-
-
-def getTeamRoster(teamName):
+def get_Team_Roster(teamName):
     rosterString = statsapi.roster(get_team_id(teamName)) 
     splitRoster = rosterString.split()
     teamRosterList = []
@@ -43,15 +37,13 @@ def getTeamRoster(teamName):
         playerData += x + " "
 
     return teamRosterList
-
-
-
+    
 # compiles team data based on given teamName (ex.mariners, rangers, astros, etc)
 # organizes data in nested dictionaries 
 # categorizes data based on position --> pitcher or non-pitcher
-def compileTeamData(teamName):
+def compile_Team_Data(teamName):
     playerStatistics = {}
-    teamRosterFetcher = getTeamRoster(teamName)
+    teamRosterFetcher = get_Team_Roster(teamName)
 
     for x in range(len(teamRosterFetcher)):
         splitPlayerString = teamRosterFetcher[x].split()
@@ -68,13 +60,37 @@ def compileTeamData(teamName):
         if get_player_id(playerFirstName, playerLastName) != None:
             careerStatHolder = statsapi.player_stats(get_player_id(playerFirstName, playerLastName), playerPositionString, 'yearByYear').split()
             beginningPlayerStatIndex = rindex(careerStatHolder, "YearByYear") + 2
-        for count, stat in enumerate(careerStatHolder[beginningPlayerStatIndex:: 2]) :   
-            playerStatistics[teamRosterFetcher[x]][stat] = careerStatHolder[beginningPlayerStatIndex + (count * 2) + 1]
-
+        for count, stat in enumerate(careerStatHolder[beginningPlayerStatIndex:: 2]) :
+            statValue = (careerStatHolder[beginningPlayerStatIndex + (count * 2) + 1])
+            # checks if statValue is a valid string that can be turned into a number. 
+            # if not it will not do anything with it.
+            if '-' not in statValue:
+                playerStatistics[teamRosterFetcher[x]][stat] = float(statValue)
+            else: 
+                playerStatistics[teamRosterFetcher[x]][stat] = statValue
     return playerStatistics
 
-print(compileTeamData("royals"))
+# stat - hitting, pitching, fielding or specific like homeRuns: or rbi:
+# returns team average for a particular statType
+# NOTE: Still need to finish total hitting, fielding, or pitching stats
+def get_team_averages(teamName, statType):
+    statTotal = 0 # total of given stat type
+    count = 0 # maintains count to avg later on
+    teamData = compile_Team_Data(teamName)
+    for key in teamData.keys():
+        if statType in teamData[key]:
+            statValue = teamData[key][statType]
+            # checks if the statValue is a float -> this eliminates string values such as ".---" and "-.--" to be considered
+            if type(statValue) == float:
+                statTotal += statValue
+                count += 1
+    # returns avg returned to two decimal values.
+    return round(statTotal / count, 2)
 
+
+
+print(get_team_averages("mariners", "homeRuns:"))
+print("My program took,", int(time.time() - start_time), "seconds to run")
     
 
 
