@@ -3,11 +3,21 @@ import pymongo
 
 # Playing Around with Mongodb
 
+# NOTE: Task for 12/29/21
+# Create MLB database
+# Create collection for teams
+# Create subcollection for individual teams
+# Populate with players - with stats
+
 client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["family_data"]
-my_collection = db["family_members"]
+mydb = client["MLB"]
+collective_teams = mydb["Teams"]
 
-mydict = {"name": "Ishaan", "age": 19}
-x = my_collection.insert_one(mydict)
 
-print(x.inserted_id)
+
+
+
+
+
+
+

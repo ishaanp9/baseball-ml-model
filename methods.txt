@@ -1,0 +1,7 @@
+find_one() --> gets first document in collection
+find() --> returns all occureances in the selection it is a query object.
+To insert multiple documents into a collection in MongoDB, we use the insert_many() method.
+To find only the documents where the "address" field starts with the letter "S", use the regular expression {"$regex": "^S"}:
+
+
+https://www.w3schools.com/python/python_mongodb_insert.asp <-- helpful site
