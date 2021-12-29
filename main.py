@@ -97,11 +97,11 @@ def get_team_averages(teamName, statType, result):
 
 
 
-
+# print(compile_Team_Data("mariners"))
 # print(get_Team_Roster("astros"))
-print(get_team_averages("mariners", "homeRuns:", "total")) 
+# print(get_team_averages("cleveland", "homeRuns:", "total")) 
 # print(get_team_averages("yankees", "homeRuns:", "average"))
-print("My program took,", int(time.time() - start_time), "seconds to run")
+# print("My program took,", int(time.time() - start_time), "seconds to run")
     
 
 
