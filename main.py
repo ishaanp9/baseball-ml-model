@@ -73,7 +73,9 @@ def compile_Team_Data(teamName):
 # stat - hitting, pitching, fielding or specific like homeRuns: or rbi:
 # returns team average for a particular statType
 # NOTE: Still need to finish total hitting, fielding, or pitching stats
-def get_team_averages(teamName, statType):
+# NOTE: when result is total it will calculate total of current roster!!! So it will not count those who are not on the roster now!
+# result can be total or avg
+def get_team_averages(teamName, statType, result):
     statTotal = 0 # total of given stat type
     count = 0 # maintains count to avg later on
     teamData = compile_Team_Data(teamName)
@@ -84,13 +86,21 @@ def get_team_averages(teamName, statType):
             if type(statValue) == float:
                 statTotal += statValue
                 count += 1
+    
+    if result.lower() == "total":
+        return round(statTotal)
+    elif result.lower() == "average":
     # returns avg returned to two decimal values.
-    return round(statTotal / count, 2)
+        return round(statTotal / count, 2)
+    else:
+        raise Exception("result parameter type was not total or average")
+
+
 
 
 # print(get_Team_Roster("astros"))
-print(get_team_averages("astros", "homeRuns:")) 
-print(get_team_averages("yankees", "homeRuns:"))
+print(get_team_averages("mariners", "homeRuns:", "total")) 
+# print(get_team_averages("yankees", "homeRuns:", "average"))
 print("My program took,", int(time.time() - start_time), "seconds to run")
     
 
