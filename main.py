@@ -56,18 +56,20 @@ def compile_Team_Data(teamName):
         playerFirstName = splitPlayerString[2] #player First Name
         playerLastName = splitPlayerString[len(splitPlayerString) - 1] #player Last Name
         playerStatistics[teamRosterFetcher[x]] = {} 
+        print(playerFirstName + playerLastName)
         # if player doesn't exsist in database (ex. Andres Munoz)
         if get_player_id(playerFirstName, playerLastName) != None:
             careerStatHolder = statsapi.player_stats(get_player_id(playerFirstName, playerLastName), playerPositionString, 'yearByYear').split()
-            beginningPlayerStatIndex = rindex(careerStatHolder, "YearByYear") + 2
-            for count, stat in enumerate(careerStatHolder[beginningPlayerStatIndex:: 2]) :
-                statValue = (careerStatHolder[beginningPlayerStatIndex + (count * 2) + 1])
-                # checks if statValue is a valid string that can be turned into a number. 
-                # if not it will not do anything with it.
-                if '-' not in statValue:
-                    playerStatistics[teamRosterFetcher[x]][stat] = float(statValue)
-                else: 
-                    playerStatistics[teamRosterFetcher[x]][stat] = statValue
+            if "YearByYear" in careerStatHolder:
+                beginningPlayerStatIndex = rindex(careerStatHolder, "YearByYear") + 2
+                for count, stat in enumerate(careerStatHolder[beginningPlayerStatIndex:: 2]) :
+                    statValue = (careerStatHolder[beginningPlayerStatIndex + (count * 2) + 1])
+                    # checks if statValue is a valid string that can be turned into a number. 
+                    # if not it will not do anything with it.
+                    if '-' not in statValue:
+                        playerStatistics[teamRosterFetcher[x]][stat] = float(statValue)
+                    else: 
+                        playerStatistics[teamRosterFetcher[x]][stat] = statValue
     return playerStatistics
 
 # stat - hitting, pitching, fielding or specific like homeRuns: or rbi:
@@ -120,9 +122,9 @@ def add_team_players_to_db(teamName):
 
     return playerlistdb
 
-
-# print(compile_Team_Data("mariners"))
-print(get_Team_Roster("diamondbacks"))
+# print(compile_Team_Data("orioles"))
+# print( statsapi.player_stats(get_player_id("Kevin", "Smith"), 'pitching', 'yearByYear') )
+# print(get_Team_Roster("orioles"))
 # print(get_team_averages("cleveland", "homeRuns:", "total")) 
 # print(get_team_averages("yankees", "homeRuns:", "average"))
 # print("My program took,", int(time.time() - start_time), "seconds to run")
