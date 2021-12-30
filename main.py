@@ -19,7 +19,7 @@ def get_player_id(playerFirstName, playerLastName):
     try: 
         playerId = None
         for count,  x in enumerate(player):
-            if (playerFirstName.lower() in x.get('firstName').lower()):
+            if (playerFirstName.lower() in x.get('useName').lower()):
                 playerId = player[count]['id']
         return playerId
     except:
@@ -56,7 +56,7 @@ def compile_Team_Data(teamName):
         playerFirstName = splitPlayerString[2] #player First Name
         playerLastName = splitPlayerString[len(splitPlayerString) - 1] #player Last Name
         playerStatistics[teamRosterFetcher[x]] = {} 
-        print(playerFirstName + playerLastName)
+        # print(playerFirstName + playerLastName)
         # if player doesn't exsist in database (ex. Andres Munoz)
         if get_player_id(playerFirstName, playerLastName) != None:
             careerStatHolder = statsapi.player_stats(get_player_id(playerFirstName, playerLastName), playerPositionString, 'yearByYear').split()
@@ -97,6 +97,8 @@ def get_team_averages(teamName, statType, result):
     else:
         raise Exception("result parameter type was not total or average")
 
+# adds team collections and players to the db 
+# NOTE: only should be called in db.py!
 def add_team_players_to_db(teamName):
     team = compile_Team_Data(teamName)
     playerlistdb = []    
@@ -109,7 +111,7 @@ def add_team_players_to_db(teamName):
         fullName = ""
         for index in range(2, len(playerSplit)):
             fullName += playerSplit[index] + " "
-        fullName.strip()
+        fullName = fullName.strip()
 
         teamPlayerdb["Name"] = fullName
         teamPlayerdb["Position"] = position
@@ -122,8 +124,10 @@ def add_team_players_to_db(teamName):
 
     return playerlistdb
 
-# print(compile_Team_Data("orioles"))
-# print( statsapi.player_stats(get_player_id("Kevin", "Smith"), 'pitching', 'yearByYear') )
+# print(("J.P. Crawford").split())
+print(get_player_id("J.D.", "Martinez"))
+# print(statsapi.lookup_player("Crawford,"))
+# print( statsapi.player_stats(641487, 'hitting', 'yearByYear') )
 # print(get_Team_Roster("orioles"))
 # print(get_team_averages("cleveland", "homeRuns:", "total")) 
 # print(get_team_averages("yankees", "homeRuns:", "average"))
