@@ -95,10 +95,34 @@ def get_team_averages(teamName, statType, result):
     else:
         raise Exception("result parameter type was not total or average")
 
+def add_team_players_to_db(teamName):
+    team = compile_Team_Data(teamName)
+    playerlistdb = []    
+
+    for player in team.keys():
+        teamPlayerdb = {}
+        playerSplit = player.split()
+        uniformNumber = playerSplit[0]
+        position = playerSplit[1]
+        fullName = ""
+        for index in range(2, len(playerSplit)):
+            fullName += playerSplit[index] + " "
+        fullName.strip()
+
+        teamPlayerdb["Name"] = fullName
+        teamPlayerdb["Position"] = position
+        teamPlayerdb["Uniform Number"] = uniformNumber
+        teamPlayerdb["Statistics"] = {}
+        for stat in team[player]:
+            teamPlayerdb["Statistics"][stat] = team[player][stat]
+
+        playerlistdb.append(teamPlayerdb)
+
+    return playerlistdb
 
 
 # print(compile_Team_Data("mariners"))
-# print(get_Team_Roster("astros"))
+print(get_Team_Roster("diamondbacks"))
 # print(get_team_averages("cleveland", "homeRuns:", "total")) 
 # print(get_team_averages("yankees", "homeRuns:", "average"))
 # print("My program took,", int(time.time() - start_time), "seconds to run")

@@ -1,6 +1,6 @@
 import pymongo
 
-from main import compile_Team_Data
+from main import *
 
 
 # Playing Around with Mongodb
@@ -35,7 +35,7 @@ miami_marlins = mydb["Arizona Diamondbacks"]
 milwaukee_brewers = mydb["Milwaukee Brewers"]
 minnesota_twins = mydb["Minnesota Twins"]
 new_york_yankees = mydb["New York Yankees"]
-new_York_mets = mydb["New York Mets"]
+new_york_mets = mydb["New York Mets"]
 oakland_athletics = mydb["Oakland Athletics"]
 philadelphia_phillies = mydb["Philadelphia Phillies"]
 pittsburgh_pirates = mydb["Pittsburgh Pirates"]
@@ -47,14 +47,40 @@ tampa_bay_rays = mydb["Tampa Bay Rays"]
 texas_rangers = mydb["Texas Rangers"]
 toronto_blue_jays = mydb["Toronto Blue Jays"]
 washington_nationals = mydb["Washington Nationals"]
-# All the MLB Teams
-
-# to dynamically populate use existing team data method
-
-# mydict = {"name": "Ishaan Puri", "Position": "1B", "Uniform Number": "#41", "Statistics": {'gamesPlayed:': 4.0, 'gamesStarted:': 0.0, 'groundOuts:': 6.0, 'airOuts:': 4.0, 'runs:': 5.0, 'doubles:': 1.0, 'triples:': 0.0, 'homeRuns:': 1.0, 'strikeOuts:': 2.0, 'baseOnBalls:': 1.0, 'intentionalWalks:': 0.0, 'hits:': 7.0, 'hitByPitch:': 0.0, 'avg:': 0.368, 'atBats:': 19.0, 'obp:': 0.4, 'slg:': 0.579, 'ops:': 0.979, 'caughtStealing:': 0.0, 'stolenBases:': 0.0, 'stolenBasePercentage:': '.---', 'groundIntoDoublePlay:': 0.0, 'numberOfPitches:': 86.0, 'era:': 12.27, 'inningsPitched:': 3.2, 'wins:': 0.0, 'losses:': 0.0, 'saves:': 0.0, 'saveOpportunities:': 0.0, 'holds:': 0.0,
-#                                                                                            'blownSaves:': 0.0, 'earnedRuns:': 5.0, 'whip:': 2.18, 'battersFaced:': 20.0, 'outs:': 11.0, 'gamesPitched:': 4.0, 'completeGames:': 0.0, 'shutouts:': 0.0, 'strikes:': 57.0, 'strikePercentage:': 0.66, 'hitBatsmen:': 0.0, 'balks:': 0.0, 'wildPitches:': 0.0, 'pickoffs:': 0.0, 'totalBases:': 11.0, 'groundOutsToAirouts:': 1.5, 'winPercentage:': '.---', 'pitchesPerInning:': 23.45, 'gamesFinished:': 2.0, 'strikeoutWalkRatio:': 2.0, 'strikeoutsPer9Inn:': 4.91, 'walksPer9Inn:': 2.45, 'hitsPer9Inn:': 17.18, 'runsScoredPer9:': 12.27, 'homeRunsPer9:': 2.45, 'inheritedRunners:': 2.0, 'inheritedRunnersScored:': 1.0, 'catchersInterference:': 0.0, 'sacBunts:': 0.0, 'sacFlies:': 0.0}}
+                                                             
 
 
-x = seattle_mariners.insert_one(compile_Team_Data("mariners"))
-# each team
-# each player --> with their indivisual stats
+
+
+# x = seattle_mariners.insert_many(add_team_players_to_db)    
+
+diamondbacks = arizona_diamondbacks.insert_many(add_team_players_to_db("diamondbacks"))
+braves = atlanta_braves.insert_many(add_team_players_to_db("braves"))
+orioles = baltimore_orioles.insert_many(add_team_players_to_db("orioles"))
+red_sox = boston_red_sox.insert_many(add_team_players_to_db("boston"))
+white_sox = chicago_white_sox.insert_many(add_team_players_to_db("white sox"))
+cubs = chicago_cubs.insert_many(add_team_players_to_db("cubs"))
+reds = cincinnati_reds.insert_many(add_team_players_to_db("reds"))
+guardians = cleveland_guardians.insert_many(add_team_players_to_db("cleveland"))
+rockies = colorado_rockies.insert_many(add_team_players_to_db("rockies")) 
+tigers = detroit_tigers.insert_many(add_team_players_to_db("tigers"))
+astros = houston_astros.insert_many(add_team_players_to_db("astros"))
+royals = kansas_city_royals.insert_many(add_team_players_to_db("royals"))
+angels = los_angeles_dodgers.insert_many(add_team_players_to_db("angels"))
+dodgers = los_angeles_dodgers.insert_many(add_team_players_to_db("dodgers"))
+marlins = miami_marlins.insert_many(add_team_players_to_db("marlins"))
+brewers = milwaukee_brewers.insert_many(add_team_players_to_db("brewers"))
+twins = minnesota_twins.insert_many(add_team_players_to_db("twins"))
+yankees = new_york_yankees.insert_many(add_team_players_to_db("yankees"))
+mets = new_york_mets.insert_many(add_team_players_to_db("mets"))
+athletics = oakland_athletics.insert_many(add_team_players_to_db("athletics"))
+phillies = philadelphia_phillies.insert_many(add_team_players_to_db("phillies"))
+pirates = pittsburgh_pirates.insert_many(add_team_players_to_db("pirates"))
+padres = san_diego_padres.insert_many(add_team_players_to_db("padres"))
+giants = san_francisco_giants.insert_many(add_team_players_to_db("giants"))
+mariners = seattle_mariners.insert_many(add_team_players_to_db("mariners")) 
+cardinals = st_louis_cardinals.insert_many(add_team_players_to_db("cardinals"))
+rays = tampa_bay_rays.insert_many(add_team_players_to_db("rays"))
+rangers = texas_rangers.insert_many(add_team_players_to_db("rangers"))
+blue_jays = toronto_blue_jays.insert_many(add_team_players_to_db("toronto"))
+nationals = washington_nationals.insert_many(add_team_players_to_db("nationals"))
