@@ -56,10 +56,15 @@ def compile_Team_Data(teamName):
         playerFirstName = splitPlayerString[2] #player First Name
         playerLastName = splitPlayerString[len(splitPlayerString) - 1] #player Last Name
         playerStatistics[teamRosterFetcher[x]] = {} 
-        # print(playerFirstName + playerLastName)
         # if player doesn't exsist in database (ex. Andres Munoz)
         if get_player_id(playerFirstName, playerLastName) != None:
-            careerStatHolder = statsapi.player_stats(get_player_id(playerFirstName, playerLastName), playerPositionString, 'yearByYear').split()
+            # print(playerFirstName + playerLastName)
+            # Some extreme cases like Alberto Rodriguez who have ids but have no stats
+            # NOTE: Hacky Code but quick fix throwing into a try except 
+            try:
+                careerStatHolder = statsapi.player_stats(get_player_id(playerFirstName, playerLastName), playerPositionString, 'yearByYear').split()
+            except:
+                continue
             if "YearByYear" in careerStatHolder:
                 beginningPlayerStatIndex = rindex(careerStatHolder, "YearByYear") + 2
                 for count, stat in enumerate(careerStatHolder[beginningPlayerStatIndex:: 2]) :
@@ -97,6 +102,7 @@ def get_team_averages(teamName, statType, result):
     else:
         raise Exception("result parameter type was not total or average")
 
+
 # adds team collections and players to the db 
 # NOTE: only should be called in db.py!
 def add_team_players_to_db(teamName):
@@ -125,13 +131,12 @@ def add_team_players_to_db(teamName):
     return playerlistdb
 
 # print(("J.P. Crawford").split())
-print(get_player_id("J.D.", "Martinez"))
-# print(statsapi.lookup_player("Crawford,"))
-# print( statsapi.player_stats(641487, 'hitting', 'yearByYear') )
-# print(get_Team_Roster("orioles"))
-# print(get_team_averages("cleveland", "homeRuns:", "total")) 
-# print(get_team_averages("yankees", "homeRuns:", "average"))
-# print("My program took,", int(time.time() - start_time), "seconds to run")
+
+# print(statsapi.lookup_player("Rodriguez,"))
+# print( statsapi.player_stats(543063, 'hitting', 'yearByYear') )
+# print(get_player_id("alberto", "rodriguez"))
+print(compile_Team_Data("mariners"))
+print("My program took,", int(time.time() - start_time), "seconds to run")
     
 
 
